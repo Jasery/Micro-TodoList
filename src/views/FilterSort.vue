@@ -1,28 +1,57 @@
 <template>
   <div class="filter-sort">
-    <div class="filter">
-      <span v-text="filterText"></span>
+    <div class="filter" @click="toggleFilter">
+      <div class="filter-sort-text">
+        <span v-text="filterText"></span>
+      </div>
+       <shade v-show="isShowFilter">
+        <ul>
+          <li>全部清单</li>
+          <li>已完成清单</li>
+          <li>未完成清单</li>
+        </ul>
+      </shade> 
+      
     </div>
-    <div class="sort">
-      <span v-text="sortText"></span>
+    <div class="sort" @click="toggleSort">
+      <div class="filter-sort-text">
+        <span v-text="sortText"></span>
+      </div>
+      <shade v-show="isShowSort">
+        <ul>
+          <li>按名称排序</li>
+          <li>按创建时间排序</li>
+          <li>按更新时间排序</li>
+        </ul>
+      </shade>
     </div>
   </div>
 </template>
 
 <script>
+import Shade from '../components/Shade.vue'
 export default {
   name: 'FilterSort',
   props: ["text"],
+  components: {
+      Shade
+  },
   data: function() {
     return {
-      isShowItems: false,
+      isShowFilter: false,
+      isShowSort: false,
       filterText: "未完成清单",
       sortText: "按更新时间排序"
     }
   },
   methods: {
-    toggleContent: function() {
-      this.isShowItems = !this.isShowItems;
+    toggleFilter: function() {
+      this.isShowSort = false;
+      this.isShowFilter = !this.isShowFilter;
+    },
+    toggleSort: function() {
+      this.isShowFilter = false;
+      this.isShowSort = !this.isShowSort;
     }
   }
 }
@@ -42,7 +71,7 @@ export default {
   clear: both;
 }
 
-.filter-sort > div {
+.filter-sort .filter, .filter-sort .sort {
   height: 35px;
   width: 50%;
   line-height: 35px;
@@ -51,14 +80,46 @@ export default {
   box-sizing: border-box;
   float: left;
   position: relative;
-  border: 1px solid #E5E5E5;
 }
-.filter-sort > div:after {
+.filter-sort .filter-sort-text:after {
   content: "∨";
   position: absolute;
   right: 10px;
 }
-
-
+.filter-sort .filter > div {
+  border: 1px solid #e5e5e5;
+  border-left: none;
+}
+.filter-sort .sort > div {
+  border: 1px solid #e5e5e5;
+  border-right: none;
+}
+.filter ul, .sort ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  background-color: white;
+  width: 250px;
+  /* width: 80%;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); */
+  color: black;
+  border-radius: 5px;
+}
+.filter ul {
+  border-right: 1px solid #e5e5e5;
+}
+.sort ul {
+  border-left: 1px solid #e5e5e5;
+}
+.filter ul li, .sort ul li {
+  border-top: 1px solid #E5E5E5;
+  padding: 5px;
+}
+.filter ul li:first-child, .sort ul li:first-child {
+  border: none;
+}
 </style>
 

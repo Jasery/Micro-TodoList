@@ -13,14 +13,16 @@
 
 <script>
 import FilterSort from './FilterSort.vue'
-import TodoItem from '../components/TodoItem.vue'
 import TodoAddLink from './TodoAddLink.vue'
+import TodoItem from '../components/TodoItem.vue'
+import Shade from '../components/Shade.vue'
 export default {
     name: 'TodoList',
     components: {
         FilterSort,
         TodoItem,
-        TodoAddLink
+        TodoAddLink,
+        Shade
     },
     data() {
         return {
