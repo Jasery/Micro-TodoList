@@ -1,12 +1,12 @@
 <template>
   <div class="todo-item-container">
-    <div class="todo-item">
+    <div class="todo-item" @click="edit(todoItem.id)">
         <div class="todo-content">
             <p class="todo-title">{{todoItem.title}}</p>
             <p class="todo-time">{{dateTimeString}}</p>
         </div>
         <div class="mark-completed">标记已完成</div>
-        <div class="remove" @click="remove(todoItem)">删除</div>
+        <div class="remove" @click.stop="remove(todoItem)">删除</div>
     </div>
   </div>
 </template>
@@ -27,8 +27,8 @@ export default {
     remove(todoItem) {
         this.$emit("remove", todoItem)
     },
-    getDateString() {
-        var date = new Date()
+    getDateString(dateString) {
+        var date = new Date(dateString)
         var year = date.getFullYear()
         var month = (date.getMonth() + 1).toString().padStart(2, '0')
         var day = date.getDate().toString().padStart(2, '0')
@@ -36,6 +36,9 @@ export default {
         var min = date.getMinutes().toString().padStart(2, '0')
         var sec = date.getSeconds().toString().padStart(2, '0')
         return `${year}-${month}-${day} ${hour}:${min}:${sec}`
+    },
+    edit(id) {
+        this.$router.push('/edit/' + id)
     }
   }
 }

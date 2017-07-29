@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import TodoList from '@/views/TodoList'
-import TodoAdd from '@/views/TodoAdd'
+import TodoContent from '@/views/TodoContent'
 
 Vue.use(Router)
 
@@ -15,12 +15,12 @@ export default new Router({
     {
       path: '/add',
       name: 'TodoAdd',
-      component: TodoAdd
+      component: TodoContent
     },
     {
-      path: '/edit',
+      path: '/edit/:id',
       name: 'TodoEdit',
-      component: TodoAdd
+      component: TodoContent
     }
 
   ]

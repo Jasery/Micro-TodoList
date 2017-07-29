@@ -36,21 +36,23 @@ import DetailItem from '../components/DetailItem.vue'
 import Shade from '../components/Shade.vue'
 import stroe from '../store'
 export default {
-  name: 'TodoAdd',
+  name: 'TodoContent',
   components: {
     DetailItem,
     Shade
   },
   data: function() {
       return {
-          id: 1,
+          detailCount: 1,
+          editItem: null,
           isShowShade: false,
           todoTitle: '',
           details: [{
               id: 0,
               isComplete: false,
               detailText: ''
-          }]
+          }],
+          todoList: {}
       }
   },
   methods: {
@@ -59,11 +61,11 @@ export default {
       },
       addDetailItem() {
           this.details.push({
-              id: this.id,
+              id: this.detailCount,
               isComplete: false,
               detailText: ''
           })
-          this.id++
+          this.detailCount++
       },
       removeDetailItem(detail) {
           var index = this.details.indexOf(detail)
@@ -73,34 +75,50 @@ export default {
           if(!this.todoTitle) {
               this.isShowShade = true;
           }
-          this.details = this.details.filter(d => d.detailText)
-          var oldData = stroe.fetch()
-          var newId = oldData.length == 0 ? 1 : oldData.sort((a, b) => a.id - b.id)[0].id + 1
-          var data = {              
-              id: newId,
-              time: this.getDateString(),
-              title: this.todoTitle,
-              items: this.details
+          if(this.editItem) {
+              //edit
+            this.editItem.title = this.todoTitle
+            this.editItem.items = this.details
+            this.editItem.time = new Date()  //编辑的时候，时间也会更新
+          } else {
+              //add
+            this.details = this.details.filter(d => d.detailText)
+            var newId = this.getNewId()
+            var data = {              
+                id: newId,
+                time: new Date(),
+                title: this.todoTitle,
+                items: this.details
+            }
+            this.todoList.push(data)
           }
-          oldData.push(data)
-          stroe.save(oldData)
-          console.log(oldData)    
+          stroe.save(this.todoList)
+          this.$router.push('/')
       },
       hideShade() {
           this.isShowShade = false
       },
-      getDateString() {
-          var date = new Date()
-          var year = date.getFullYear()
-          var month = date.getMonth() + 1
-          var day = date.getDate()
-          var hour = date.getHours()
-          var min = date.getMinutes()
-          var sec = date.getSeconds()
-          return `${year}-${month}-${day} ${hour}:${min}:${sec}`
+      getNewId() {
+          if(this.todoList.length == 0) {
+              return 1
+          }
+          var maxId = this.todoList[0].id
+          this.todoList.forEach(x => x.id > maxId ? maxId = x.id : maxId)
+          return maxId + 1
       }
   },
   watch: {
+  },
+  mounted() {
+    this.todoList = stroe.fetch()
+    if(this.$route.params.id) {
+        var editItem = this.todoList.find(t => t.id == this.$route.params.id)
+        if(editItem) {
+            this.todoTitle = editItem.title
+            this.details = JSON.parse(JSON.stringify(editItem.items))
+            this.editItem = editItem    //把需要编辑的对象存下，方便后续的数据更新
+        }
+    }
   }
 }
 </script>
