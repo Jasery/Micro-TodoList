@@ -3,9 +3,6 @@
         <filter-sort></filter-sort>
         <div class="content">
             <todo-item v-for="item in todoList" :key="item.id" :todoItem="item"></todo-item>
-            <todo-item v-for="item in todoList" :key="item.id" :todoItem="item"></todo-item>
-            <todo-item v-for="item in todoList" :key="item.id" :todoItem="item"></todo-item>
-            <todo-item v-for="item in todoList" :key="item.id" :todoItem="item"></todo-item>
         </div>
         <todo-add-link></todo-add-link>
     </div>
@@ -16,6 +13,7 @@ import FilterSort from './FilterSort.vue'
 import TodoAddLink from './TodoAddLink.vue'
 import TodoItem from '../components/TodoItem.vue'
 import Shade from '../components/Shade.vue'
+import stroe from '../store'
 export default {
     name: 'TodoList',
     components: {
@@ -30,19 +28,7 @@ export default {
         };
     },
     mounted () {
-        this.todoList = [
-            {
-                id: 1,
-                title: "这是一条备忘录",
-                time: "2017-07-21 19:32:00"
-            },
-            {
-                id: 2,
-                title: "这是lingwai一条备忘录",
-                time: "2017-07-21 19:32:00"
-            }
-        ]
-        
+        this.todoList = stroe.fetch()  
     },
     methods: {
 

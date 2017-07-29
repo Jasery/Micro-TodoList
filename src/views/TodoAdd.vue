@@ -16,38 +16,97 @@
                     <div class="item-remove">删除</div>
                 </div>
             </div> -->
-            <detail-item v-for="detail in details" :key="detail"></detail-item>
-            <div class="add-detail-item">
+            <detail-item v-for="(detail, index) in details" :key="'detail-' + detail.id" :detail.sync="detail" @remove="removeDetailItem"></detail-item>
+            <div class="add-detail-item" @click="addDetailItem">
                 添加事项
             </div>
         </div>
-        <button class="detail-save">保存</button>
+        <button class="detail-save" v-show="this.todoTitle || this.details.length > 0" @click="detailSave">保存</button>
+        <shade v-show="isShowShade" @shadeClick="hideShade">
+            <div class="err-tip">
+                <p class="err-title">提示</p>
+                <p class="err-msg">请输入清单标题</p>
+                <p class="err-confirm">确定</p>
+            </div>
+        </shade>
     </div>
 </template>
 <script>
 import DetailItem from '../components/DetailItem.vue'
+import Shade from '../components/Shade.vue'
+import stroe from '../store'
 export default {
   name: 'TodoAdd',
   components: {
-    DetailItem
+    DetailItem,
+    Shade
   },
   data: function() {
       return {
+          id: 1,
+          isShowShade: false,
           todoTitle: '',
-          details: [{}]
+          details: [{
+              id: 0,
+              isComplete: false,
+              detailText: ''
+          }]
       }
   },
   methods: {
       clearInput() {
           this.todoTitle = ''
+      },
+      addDetailItem() {
+          this.details.push({
+              id: this.id,
+              isComplete: false,
+              detailText: ''
+          })
+          this.id++
+      },
+      removeDetailItem(detail) {
+          var index = this.details.indexOf(detail)
+          this.details.splice(index, 1)
+      },
+      detailSave() {
+          if(!this.todoTitle) {
+              this.isShowShade = true;
+          }
+          this.details = this.details.filter(d => d.detailText)
+          var oldData = stroe.fetch()
+          var newId = oldData.length == 0 ? 1 : oldData.sort((a, b) => a.id - b.id)[0].id + 1
+          var data = {              
+              id: newId,
+              time: this.getDateString(),
+              title: this.todoTitle,
+              items: this.details
+          }
+          oldData.push(data)
+          stroe.save(oldData)
+          console.log(oldData)    
+      },
+      hideShade() {
+          this.isShowShade = false
+      },
+      getDateString() {
+          var date = new Date()
+          var year = date.getFullYear()
+          var month = date.getMonth() + 1
+          var day = date.getDate()
+          var hour = date.getHours()
+          var min = date.getMinutes()
+          var sec = date.getSeconds()
+          return `${year}-${month}-${day} ${hour}:${min}:${sec}`
       }
+  },
+  watch: {
   }
 }
 </script>
 <style>
     .todo-add {
         margin: 10px 0;
-        /* position: relative; */
     }
     .todo-title {
         position: relative;
@@ -103,5 +162,24 @@ export default {
         left: 50%;
         transform: translateX(-50%);
         font-size: 18px;
+    }
+    .err-tip {
+        background-color: white;
+        padding: 20px;
+        border-radius: 5px;
+        width: 250px; 
+    }
+    .err-tip .err-title {
+        margin: 0;
+        font-size: 20px;
+    }
+    .err-tip .err-msg {
+        margin-top: 10px; 
+        color: #8A778A;
+    }
+    .err-tip .err-confirm {
+        margin: 20px 0 0 0;
+        text-align: right;
+        color: #0EBF5A;
     }
 </style>

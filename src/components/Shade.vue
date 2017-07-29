@@ -1,5 +1,5 @@
 <template>
-  <div class="shade">
+  <div class="shade" @click="shadeClick">
       <div class="shade-content">
           <slot></slot>
       </div>
@@ -11,6 +11,11 @@ export default {
   name: 'Shade',
   data() {
       return {}
+  },
+  methods: {
+      shadeClick() {
+          this.$emit("shadeClick")
+      }
   }
 }
 </script>

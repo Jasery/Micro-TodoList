@@ -2,12 +2,12 @@
     <div class="detail-item">
         <div class="detail-content">
             <div class="isComplete">
-                <input v-model="isComplete" type="checkbox">
+                <input v-model="detail.isComplete" type="checkbox">
             </div>
             <div class="detail-text">
-                <input v-model="detailText" type="text" placeholder="点击编辑">
+                <input v-model="detail.detailText" type="text" placeholder="点击编辑">
             </div>
-            <div class="item-remove">删除</div>
+            <div class="item-remove" @click="remove(detail)">删除</div>
         </div>
     </div>
 </template>
@@ -15,11 +15,25 @@
 <script>
 export default {
   name: 'DetailItem',
+  props: ["detail"],
   data: function() {
       return {
-          isComplete: false,
-          detailText: ''
+        //   isComplete: false,
+        //   detailText: ''
       }
+  },
+  methods: {
+    remove(detail) {
+        this.$emit("remove", detail)
+    }
+  },
+  watch: {
+    //   isComplete: function() {
+    //       this.valChange()
+    //   },
+    //   detailText: function() {
+    //       this.valChange()
+    //   }
   }
 
 }
