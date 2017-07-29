@@ -2,7 +2,11 @@
     <div>
         <filter-sort></filter-sort>
         <div class="content">
-            <todo-item v-for="item in todoList" :key="item.id" :todoItem="item"></todo-item>
+            <todo-item v-for="item in todoList" 
+                :key="'todo-item-'+ item.id" 
+                :todoItem="item" 
+                @remove="removeTodoItem">
+            </todo-item>
         </div>
         <todo-add-link></todo-add-link>
     </div>
@@ -31,18 +35,27 @@ export default {
         this.todoList = stroe.fetch()  
     },
     methods: {
-
+        removeTodoItem(todoItem) {
+            var index = this.todoList.indexOf(todoItem)
+            this.todoList.splice(index,1)
+        }
+    },
+    watch: {
+        todoList: {
+            handler: function(val, oldVal) {
+                stroe.save(val)
+            },
+            deep: true
+        }
     }
 }
 </script>
 
 <style>
-    .content{
-        /* height: 570px; */
+    .content{        
         padding-top: 35px;
         overflow-x: auto;
         box-sizing: border-box;
-        /* border: 1px solid salmon; */
     }
     .content::-webkit-scrollbar {
         display: none;

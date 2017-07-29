@@ -18,8 +18,6 @@ export default {
   props: ["detail"],
   data: function() {
       return {
-        //   isComplete: false,
-        //   detailText: ''
       }
   },
   methods: {
@@ -28,12 +26,6 @@ export default {
     }
   },
   watch: {
-    //   isComplete: function() {
-    //       this.valChange()
-    //   },
-    //   detailText: function() {
-    //       this.valChange()
-    //   }
   }
 
 }

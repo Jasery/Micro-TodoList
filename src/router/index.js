@@ -16,6 +16,11 @@ export default new Router({
       path: '/add',
       name: 'TodoAdd',
       component: TodoAdd
+    },
+    {
+      path: '/edit',
+      name: 'TodoEdit',
+      component: TodoAdd
     }
 
   ]

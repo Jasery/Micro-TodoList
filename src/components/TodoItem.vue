@@ -3,10 +3,10 @@
     <div class="todo-item">
         <div class="todo-content">
             <p class="todo-title">{{todoItem.title}}</p>
-            <p class="todo-time">{{todoItem.time}}</p>
+            <p class="todo-time">{{dateTimeString}}</p>
         </div>
         <div class="mark-completed">标记已完成</div>
-        <div class="remove">删除</div>
+        <div class="remove" @click="remove(todoItem)">删除</div>
     </div>
   </div>
 </template>
@@ -14,7 +14,30 @@
 <script>
 export default {
   name: "TodoItem",
-  props: ["todoItem", "msg"]
+  data: function() {
+      return {}
+  },
+  computed: {
+      dateTimeString() {
+          return this.getDateString(this.todoItem.time)
+      }
+  },
+  props: ["todoItem"],
+  methods: {
+    remove(todoItem) {
+        this.$emit("remove", todoItem)
+    },
+    getDateString() {
+        var date = new Date()
+        var year = date.getFullYear()
+        var month = (date.getMonth() + 1).toString().padStart(2, '0')
+        var day = date.getDate().toString().padStart(2, '0')
+        var hour = date.getHours().toString().padStart(2, '0')
+        var min = date.getMinutes().toString().padStart(2, '0')
+        var sec = date.getSeconds().toString().padStart(2, '0')
+        return `${year}-${month}-${day} ${hour}:${min}:${sec}`
+    }
+  }
 }
 </script>
 
