@@ -2,10 +2,10 @@
   <div class="todo-item-container">
     <div class="todo-item" @click="edit(todoItem.id)">
         <div class="todo-content">
-            <p class="todo-title">{{todoItem.title}}</p>
-            <p class="todo-time">{{dateTimeString}}</p>
+            <p :class="['todo-title', {'isCompleted': todoItem.isCompleted}]">{{todoItem.title}}</p>
+            <p class="todo-time">{{todoItem.updateTime}}</p>
         </div>
-        <div class="mark-completed">标记已完成</div>
+        <div class="mark-completed" @click.stop="toggleCompleteState(todoItem)">{{markStateText}}</div>
         <div class="remove" @click.stop="remove(todoItem)">删除</div>
     </div>
   </div>
@@ -18,8 +18,8 @@ export default {
       return {}
   },
   computed: {
-      dateTimeString() {
-          return this.getDateString(this.todoItem.time)
+      markStateText: function() {
+        return this.todoItem.isCompleted ? '标记为未完成' : '标记为已完成'
       }
   },
   props: ["todoItem"],
@@ -27,18 +27,11 @@ export default {
     remove(todoItem) {
         this.$emit("remove", todoItem)
     },
-    getDateString(dateString) {
-        var date = new Date(dateString)
-        var year = date.getFullYear()
-        var month = (date.getMonth() + 1).toString().padStart(2, '0')
-        var day = date.getDate().toString().padStart(2, '0')
-        var hour = date.getHours().toString().padStart(2, '0')
-        var min = date.getMinutes().toString().padStart(2, '0')
-        var sec = date.getSeconds().toString().padStart(2, '0')
-        return `${year}-${month}-${day} ${hour}:${min}:${sec}`
-    },
     edit(id) {
         this.$router.push('/edit/' + id)
+    },
+    toggleCompleteState(todoItem) {
+        todoItem.isCompleted = !todoItem.isCompleted
     }
   }
 }
@@ -67,6 +60,9 @@ export default {
         box-sizing: border-box;
         margin: 0;
         float: left;
+    }
+    .todo-item .todo-title.isCompleted {
+        color: darkgrey;
     }
     .todo-item .todo-content {
         width: 67%;

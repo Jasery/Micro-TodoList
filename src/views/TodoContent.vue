@@ -79,16 +79,19 @@ export default {
               //edit
             this.editItem.title = this.todoTitle
             this.editItem.items = this.details
-            this.editItem.time = new Date()  //编辑的时候，时间也会更新
+            this.editItem.updateTime = this.getDateString()  //编辑的时候，时间也会更新
+            this.editItem.isCompleted = false
           } else {
               //add
             this.details = this.details.filter(d => d.detailText)
             var newId = this.getNewId()
             var data = {              
                 id: newId,
-                time: new Date(),
+                createTime: this.getDateString(),
+                updateTime: this.getDateString(),
                 title: this.todoTitle,
-                items: this.details
+                items: this.details,
+                isCompleted: false
             }
             this.todoList.push(data)
           }
@@ -105,7 +108,17 @@ export default {
           var maxId = this.todoList[0].id
           this.todoList.forEach(x => x.id > maxId ? maxId = x.id : maxId)
           return maxId + 1
-      }
+      },
+        getDateString() {
+            var date = new Date()
+            var year = date.getFullYear()
+            var month = (date.getMonth() + 1).toString().padStart(2, '0')
+            var day = date.getDate().toString().padStart(2, '0')
+            var hour = date.getHours().toString().padStart(2, '0')
+            var min = date.getMinutes().toString().padStart(2, '0')
+            var sec = date.getSeconds().toString().padStart(2, '0')
+            return `${year}-${month}-${day} ${hour}:${min}:${sec}`
+        }
   },
   watch: {
   },

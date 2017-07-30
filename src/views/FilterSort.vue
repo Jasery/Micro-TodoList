@@ -6,9 +6,9 @@
       </div>
        <shade v-show="isShowFilter">
         <ul>
-          <li>全部清单</li>
-          <li>已完成清单</li>
-          <li>未完成清单</li>
+          <li @click="filter('all')">{{filterTexts['all']}}</li>
+          <li @click="filter('notCompleted')">{{filterTexts['notCompleted']}}</li>
+          <li @click="filter('isCompleted')">{{filterTexts['isCompleted']}}</li>
         </ul>
       </shade> 
       
@@ -19,9 +19,9 @@
       </div>
       <shade v-show="isShowSort">
         <ul>
-          <li>按名称排序</li>
-          <li>按创建时间排序</li>
-          <li>按更新时间排序</li>
+          <li @click="sort('title')">{{sortTexts['title']}}</li>
+          <li @click="sort('createTime')">{{sortTexts['createTime']}}</li>
+          <li @click="sort('updateTime')">{{sortTexts['updateTime']}}</li>
         </ul>
       </shade>
     </div>
@@ -32,26 +32,48 @@
 import Shade from '../components/Shade.vue'
 export default {
   name: 'FilterSort',
-  props: ["text"],
+  props: ['text'],
   components: {
       Shade
   },
-  data: function() {
+  data() {
     return {
       isShowFilter: false,
       isShowSort: false,
-      filterText: "未完成清单",
-      sortText: "按更新时间排序"
+      filterText: '全部清单',
+      sortText: '按创建时间排序',
+      filterTexts: {
+        all: '全部清单',
+        notCompleted: '未完成清单', 
+        isCompleted: '已完成清单'
+      },
+      sortTexts: {
+        title: '按名称排序',
+        createTime: '按创建时间排序',
+        updateTime: '按更新时间排序'
+      }
     }
   },
+  mounted() {
+    this.$emit('sort', 'updateTime')
+    this.$emit('filter', 'all')
+  },
   methods: {
-    toggleFilter: function() {
+    toggleFilter() {
       this.isShowSort = false;
       this.isShowFilter = !this.isShowFilter;
     },
-    toggleSort: function() {
+    toggleSort() {
       this.isShowFilter = false;
       this.isShowSort = !this.isShowSort;
+    },
+    sort(type) {
+      this.sortText = this.sortTexts[type]
+      this.$emit('sort', type)
+    }, 
+    filter(type) {
+      this.filterText = this.filterTexts[type]
+      this.$emit('filter', type)
     }
   }
 }
@@ -66,7 +88,7 @@ export default {
 }
 
 .filter-sort:after {
-  content: "";
+  content: '';
   display: block;
   clear: both;
 }
@@ -82,7 +104,7 @@ export default {
   position: relative;
 }
 .filter-sort .filter-sort-text:after {
-  content: "∨";
+  content: '∨';
   position: absolute;
   right: 10px;
 }
