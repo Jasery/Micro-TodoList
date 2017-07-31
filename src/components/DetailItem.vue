@@ -1,8 +1,9 @@
 <template>  
     <div class="detail-item">
         <div class="detail-content">
-            <div class="isComplete">
-                <input v-model="detail.isComplete" type="checkbox">
+            <div class="isCompleted">
+                <input :id="'isCompleted-' + detail.id" v-model="detail.isCompleted" type="checkbox">
+                <label :for="'isCompleted-' + detail.id"></label>
             </div>
             <div class="detail-text">
                 <input v-model="detail.detailText" type="text" placeholder="点击编辑">
@@ -48,14 +49,51 @@ export default {
     .detail-item .detail-content > div {
         float: left;
     }
-    .detail-item .detail-content .isComplete {
+    .detail-item .detail-content .isCompleted {
         width: 10%;
         padding: 5px 0;   
     }
-    .detail-item .detail-content .isComplete input[type=checkbox] {
+    .detail-item .detail-content .isCompleted input[type=checkbox] {
+        display: none; 
+    }
+    /* 优化checkbox */
+    .detail-item .detail-content .isCompleted input[type=checkbox] + label {
         height: 25px;
         width: 25px;
-        margin: 2px;
+        /* background-color: #e5e5e5; */
+        box-sizing: border-box;
+        display: inline-block;
+        border: 1px solid #0EBF5A;
+        margin: 2px;        
+        position: relative; 
+        /* z-index: -1; */
+    }
+    .detail-item .detail-content .isCompleted input[type=checkbox]:checked + label{
+        border: 1px solid #e5e5e5;
+    }
+    .detail-item .detail-content .isCompleted input[type=checkbox]:checked + label:before {
+        content: "";
+        display: block;
+        box-sizing: border-box;  
+        position: absolute;
+        border-top: 3px solid transparent;
+        border-right: 10px solid #0EBF5A;;
+        border-bottom: 3px solid transparent;
+        border-left: 0;
+        transform: translateY(11px) rotate(30deg);
+    }
+    .detail-item .detail-content .isCompleted input[type=checkbox]:checked + label:after {
+        content: "";
+        display: block;
+        box-sizing: border-box;  
+        position: absolute;
+        /* border: 3px solid black; */
+        border-top: 3px solid transparent;
+        border-right: 0;
+        border-bottom: 3px solid transparent;
+        border-left: 20px solid #0EBF5A;;
+        transform: translate(4px, 8px) rotate(-45deg);
+
     }
     .detail-item .detail-content .detail-text {
         width: 80%;

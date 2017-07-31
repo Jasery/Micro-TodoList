@@ -26,6 +26,7 @@ body {
   color: white;font-size: 20px;
   text-indent: 50px;
   position: fixed;
+  z-index: 100;
   top: 0;
   width: 100%;
 }

@@ -36,79 +36,80 @@ import DetailItem from '../components/DetailItem.vue'
 import Shade from '../components/Shade.vue'
 import stroe from '../store'
 export default {
-  name: 'TodoContent',
-  components: {
+    name: 'TodoContent',
+    components: {
     DetailItem,
     Shade
-  },
-  data: function() {
-      return {
-          detailCount: 1,
-          editItem: null,
-          isShowShade: false,
-          todoTitle: '',
-          details: [{
-              id: 0,
-              isComplete: false,
-              detailText: ''
-          }],
-          todoList: {}
-      }
+    },
+    data () {
+        return {
+            detailCount: 1,
+            editItem: null,
+            isShowShade: false,
+            todoTitle: '',
+            details: [{
+                id: 0,
+                isComplete: false,
+                detailText: ''
+            }],
+            todoList: {}
+        }
   },
   methods: {
-      clearInput() {
-          this.todoTitle = ''
-      },
-      addDetailItem() {
-          this.details.push({
-              id: this.detailCount,
-              isComplete: false,
-              detailText: ''
-          })
-          this.detailCount++
-      },
-      removeDetailItem(detail) {
-          var index = this.details.indexOf(detail)
-          this.details.splice(index, 1)
-      },
-      detailSave() {
-          if(!this.todoTitle) {
-              this.isShowShade = true;
-          }
-          if(this.editItem) {
-              //edit
-            this.editItem.title = this.todoTitle
-            this.editItem.items = this.details
-            this.editItem.updateTime = this.getDateString()  //编辑的时候，时间也会更新
-            this.editItem.isCompleted = false
-          } else {
-              //add
-            this.details = this.details.filter(d => d.detailText)
-            var newId = this.getNewId()
-            var data = {              
-                id: newId,
-                createTime: this.getDateString(),
-                updateTime: this.getDateString(),
-                title: this.todoTitle,
-                items: this.details,
-                isCompleted: false
+        clearInput() {
+            this.todoTitle = ''
+        },
+        addDetailItem() {
+            this.details.push({
+                id: this.detailCount,
+                isComplete: false,
+                detailText: ''
+            })
+            this.detailCount++
+        },
+        removeDetailItem(detail) {
+            var index = this.details.indexOf(detail)
+            this.details.splice(index, 1)
+        },
+        detailSave() {
+            if(!this.todoTitle) {
+                this.isShowShade = true;
+                return
             }
-            this.todoList.push(data)
-          }
-          stroe.save(this.todoList)
-          this.$router.push('/')
-      },
-      hideShade() {
-          this.isShowShade = false
-      },
-      getNewId() {
-          if(this.todoList.length == 0) {
-              return 1
-          }
-          var maxId = this.todoList[0].id
-          this.todoList.forEach(x => x.id > maxId ? maxId = x.id : maxId)
-          return maxId + 1
-      },
+            if(this.editItem) {
+                //edit
+                this.editItem.title = this.todoTitle
+                this.editItem.items = this.details.filter(d => d.detailText)
+                this.editItem.updateTime = this.getDateString()  //编辑的时候，时间也会更新
+                this.editItem.isCompleted = false
+            } else {
+                //add
+                this.details = this.details.filter(d => d.detailText)
+                var newId = this.getMaxId(this.todoList) + 1
+                var data = {              
+                    id: newId,
+                    createTime: this.getDateString(),
+                    updateTime: this.getDateString(),
+                    title: this.todoTitle,
+                    items: this.details,
+                    isCompleted: false
+                }
+                this.todoList.push(data)
+            }
+            stroe.save(this.todoList)
+            this.$router.push('/')
+        },
+        hideShade() {
+            this.isShowShade = false
+        },
+        getMaxId(list) {
+            if(list.length == 0) {
+                return 1
+            }
+            var maxId = list[0].id
+            list.forEach(x => x.id > maxId ? maxId = x.id : maxId)
+            return maxId
+        },
         getDateString() {
             var date = new Date()
             var year = date.getFullYear()
@@ -119,20 +120,19 @@ export default {
             var sec = date.getSeconds().toString().padStart(2, '0')
             return `${year}-${month}-${day} ${hour}:${min}:${sec}`
         }
-  },
-  watch: {
-  },
-  mounted() {
-    this.todoList = stroe.fetch()
-    if(this.$route.params.id) {
-        var editItem = this.todoList.find(t => t.id == this.$route.params.id)
-        if(editItem) {
-            this.todoTitle = editItem.title
-            this.details = JSON.parse(JSON.stringify(editItem.items))
-            this.editItem = editItem    //把需要编辑的对象存下，方便后续的数据更新
+    },
+    mounted() {
+        this.todoList = stroe.fetch()
+        if(this.$route.params.id) {
+            var editItem = this.todoList.find(t => t.id == this.$route.params.id)
+            if(editItem) {
+                this.todoTitle = editItem.title
+                this.details = JSON.parse(JSON.stringify(editItem.items))
+                this.editItem = editItem    //把需要编辑的对象存下，方便后续的数据更新
+                this.detailCount = this.getMaxId(editItem.items) + 1
+            }
         }
     }
-  }
 }
 </script>
 <style>
@@ -140,7 +140,7 @@ export default {
         margin: 10px 0;
     }
     .todo-title {
-        position: relative;
+         position: relative; 
     }
     .todo-title input {
         width: 100%;
@@ -155,7 +155,7 @@ export default {
         outline: none;
     }
     .todo-title .clear-input {
-        position: absolute;
+        position: absolute; 
         color: white;
         background-color: #0EBF5A;
         height: 20px;
@@ -164,8 +164,8 @@ export default {
         text-align: center;
         font-size: 20px;
         border-radius: 50%;
-        top: 20px;
-        right: 20px;
+        top: 20px; 
+        right: 20px; 
     }
     .todo-detail {
         margin-left: 10px;
@@ -188,7 +188,7 @@ export default {
         border-radius: 5px;
         color: white;
         width: 90%;
-        position: absolute;
+        position: fixed;
         bottom: 20px;
         left: 50%;
         transform: translateX(-50%);

@@ -104,9 +104,18 @@ export default {
   position: relative;
 }
 .filter-sort .filter-sort-text:after {
-  content: '∨';
+  content: '';
   position: absolute;
   right: 10px;
+  top: 10px;
+  display: block;
+  border-width: 0 1px 1px 0;
+  border-color: #0EBF5A;
+  border-style: solid;
+  /* border: 1px solid black; */
+  height: 10px;
+  width: 10px;
+  transform: rotate(45deg)
 }
 .filter-sort .filter > div {
   border: 1px solid #e5e5e5;
