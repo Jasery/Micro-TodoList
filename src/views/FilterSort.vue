@@ -4,26 +4,30 @@
       <div class="filter-sort-text">
         <span v-text="filterText"></span>
       </div>
-       <shade v-show="isShowFilter">
-        <ul>
-          <li @click="filter('all')">{{filterTexts['all']}}</li>
-          <li @click="filter('notCompleted')">{{filterTexts['notCompleted']}}</li>
-          <li @click="filter('isCompleted')">{{filterTexts['isCompleted']}}</li>
-        </ul>
-      </shade> 
+      <transition enter-active-class="animated fadeIn" leave-active-class="animated fadeOut">
+        <shade v-show="isShowFilter">
+          <ul>
+            <li @click="filter('all')">{{filterTexts['all']}}</li>
+            <li @click="filter('notCompleted')">{{filterTexts['notCompleted']}}</li>
+            <li @click="filter('isCompleted')">{{filterTexts['isCompleted']}}</li>
+          </ul>
+        </shade> 
+      </transition>
       
     </div>
     <div class="sort" @click="toggleSort">
       <div class="filter-sort-text">
         <span v-text="sortText"></span>
       </div>
-      <shade v-show="isShowSort">
-        <ul>
-          <li @click="sort('title')">{{sortTexts['title']}}</li>
-          <li @click="sort('createTime')">{{sortTexts['createTime']}}</li>
-          <li @click="sort('updateTime')">{{sortTexts['updateTime']}}</li>
-        </ul>
-      </shade>
+      <transition enter-active-class="animated fadeIn" leave-active-class="animated fadeOut">
+        <shade v-show="isShowSort">
+          <ul>
+            <li @click="sort('title')">{{sortTexts['title']}}</li>
+            <li @click="sort('createTime')">{{sortTexts['createTime']}}</li>
+            <li @click="sort('updateTime')">{{sortTexts['updateTime']}}</li>
+          </ul>
+        </shade>
+      </transition>
     </div>
   </div>
 </template>
@@ -40,8 +44,8 @@ export default {
     return {
       isShowFilter: false,
       isShowSort: false,
-      filterText: '全部清单',
-      sortText: '按创建时间排序',
+      filterText: '未完成清单',
+      sortText: '按更新时间排序',
       filterTexts: {
         all: '全部清单',
         notCompleted: '未完成清单', 
@@ -56,7 +60,7 @@ export default {
   },
   mounted() {
     this.$emit('sort', 'updateTime')
-    this.$emit('filter', 'all')
+    this.$emit('filter', 'notCompleted')
   },
   methods: {
     toggleFilter() {
@@ -80,6 +84,9 @@ export default {
 </script>
 
 <style>
+.fadeIn,.fadeOut {
+    animation-duration: .3s !important; 
+}
 .filter-sort {
   position: absolute;
   top: 45px;

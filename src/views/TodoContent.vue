@@ -16,19 +16,23 @@
                     <div class="item-remove">删除</div>
                 </div>
             </div> -->
-            <detail-item v-for="(detail, index) in details" :key="'detail-' + detail.id" :detail.sync="detail" @remove="removeDetailItem"></detail-item>
+            <transition-group enter-active-class="animated fadeInDown" leave-active-class="animated fadeOutRight">
+                <detail-item v-for="(detail, index) in details" :key="'detail-' + detail.id" :detail.sync="detail" @remove="removeDetailItem"></detail-item>
+            </transition-group>
             <div class="add-detail-item" @click="addDetailItem">
                 添加事项
             </div>
         </div>
         <button class="detail-save" v-show="this.todoTitle || this.details.length > 0" @click="detailSave">保存</button>
-        <shade v-show="isShowShade" @shadeClick="hideShade">
-            <div class="err-tip">
-                <p class="err-title">提示</p>
-                <p class="err-msg">请输入清单标题</p>
-                <p class="err-confirm">确定</p>
-            </div>
-        </shade>
+        <transition enter-active-class="animated fadeIn" leave-active-class="animated fadeOut">
+            <shade v-show="isShowShade" @shadeClick="hideShade">
+                <div class="err-tip">
+                    <p class="err-title">提示</p>
+                    <p class="err-msg">请输入清单标题</p>
+                    <p class="err-confirm">确定</p>
+                </div>
+            </shade>
+        </transition>
     </div>
 </template>
 <script>
@@ -96,6 +100,7 @@ export default {
                 }
                 this.todoList.push(data)
             }
+            
             stroe.save(this.todoList)
             this.$router.push('/')
         },
@@ -113,11 +118,16 @@ export default {
         getDateString() {
             var date = new Date()
             var year = date.getFullYear()
-            var month = (date.getMonth() + 1).toString().padStart(2, '0')
-            var day = date.getDate().toString().padStart(2, '0')
-            var hour = date.getHours().toString().padStart(2, '0')
-            var min = date.getMinutes().toString().padStart(2, '0')
-            var sec = date.getSeconds().toString().padStart(2, '0')
+            var month = date.getMonth() + 1
+            month = month >= 10 ? month : '0' + month
+            var day = date.getDate()
+            day = day >= 10 ? day : '0' + day
+            var hour = date.getHours()
+            hour = hour >= 10 ? hour : '0' + hour
+            var min = date.getMinutes()
+            min = min >= 10 ? min : '0' + min
+            var sec = date.getSeconds()
+            sec = sec >= 10 ? sec : '0' + sec
             return `${year}-${month}-${day} ${hour}:${min}:${sec}`
         }
     },

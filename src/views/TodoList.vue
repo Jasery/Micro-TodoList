@@ -2,11 +2,13 @@
     <div>
         <filter-sort @filter="changeFilter" @sort="changeSort"></filter-sort>
         <div class="content">
-            <todo-item v-for="item in displayList " 
-                :key="'todo-item-'+ item.id" 
-                :todoItem="item" 
-                @remove="removeTodoItem">
-            </todo-item>
+            <transition-group enter-active-class="animated fadeInDown">
+                <todo-item v-for="item in displayList " 
+                    :key="'todo-item-'+ item.id" 
+                    :todoItem="item" 
+                    @remove="removeTodoItem">
+                </todo-item>
+            </transition-group>
         </div>
         <todo-add-link></todo-add-link>
     </div>
@@ -81,6 +83,11 @@ export default {
 </script>
 
 <style>
+     @import "../assets/css/animate.css"; 
+     .animated {
+         animation-duration: .5s;
+     }
+     
     .content{        
         padding-top: 35px;
         overflow-x: auto;
