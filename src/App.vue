@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <div class="title">印象笔记微清单</div>
+    <div class="title">微清单</div>
     <div class="g-content">
       <router-view></router-view>
     </div>
