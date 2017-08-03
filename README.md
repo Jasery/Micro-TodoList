@@ -1,6 +1,8 @@
 # 网页版印象笔记微清单
 
-UI的设计来自印象笔记微清单微信小程序
+UI的设计来自印象笔记微清单微信小程序,Demo地址请看[Demo](https://jasery.github.io/Micro-TodoList/dist/index.html)
+> 此demo会把数据保存到浏览器，如果不清空浏览器的缓存下次再次打开还会保留数据
+
 
 ## 安装
 1. 先把仓库clone到本地
@@ -29,3 +31,6 @@ npm run dev
 ![参考图片4](./screenshot/pic4.png)
 ![参考图片5](./screenshot/pic5.png)
 ![参考图片6](./screenshot/pic6.png)
+
+## 联系
+### ISSUE
